@@ -475,5 +475,113 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
   }
 });
 </script>
-</body>
+<!-- SNAPY KI-CHATBOT WIDGET -->
+<div id="snapy-widget" style="position: fixed; bottom: 25px; right: 25px; z-index: 9999; font-family: Inter, sans-serif;">
+  <!-- Floating Button -->
+  <button id="snapy-trigger" style="display: flex; align-items: center; gap: 10px; background: #00ff83; color: #052116; border: none; padding: 12px 20px; border-radius: 50px; font-weight: 700; font-size: 13px; cursor: pointer; box-shadow: 0 10px 25px rgba(0,255,131,0.25); transition: transform 0.2s;">
+    <svg style="width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24"><path d="m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5z"/></svg>
+    <span>Frag Snapy (KI)</span>
+  </button>
+
+  <!-- Chat Fenster -->
+  <div id="snapy-box" style="display: none; position: absolute; bottom: 65px; right: 0; width: 340px; max-width: 90vw; height: 450px; background: #101617; border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; box-shadow: 0 20px 40px rgba(0,0,0,0.8); flex-direction: column; overflow: hidden;">
+    <!-- Chat Kopfzeile -->
+    <div style="background: #151d1e; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
+      <div style="display: flex; align-items: center; gap: 10px;">
+        <span style="width: 10px; height: 10px; background: #00ff83; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00ff83;"></span>
+        <strong style="color: #f3f5f2; font-size: 14px;">Snapy · KI-Wächter</strong>
+      </div>
+      <button id="snapy-close" style="background: none; border: none; color: #a5b2b0; font-size: 18px; cursor: pointer;">✕</button>
+    </div>
+
+    <!-- Nachrichten-Verlauf -->
+    <div id="snapy-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 12px; line-height: 1.5; color: #d5e3da;">
+      <div style="background: rgba(0,255,131,0.08); border: 1px solid rgba(0,255,131,0.2); padding: 10px 14px; border-radius: 10px; align-self: flex-start; max-width: 85%;">
+        👋 Hi! Ich bin <strong>Snapy</strong>, dein KI-Wächter. Wie kann ich dir beim Immobilien CRM oder deiner Vermarktung helfen?
+      </div>
+    </div>
+
+    <!-- Schnell-Buttons -->
+    <div style="padding: 8px 12px; background: #0c1112; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 6px; overflow-x: auto;">
+      <button class="snapy-quick" data-msg="Was ist SnapHome?" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a5b2b0; font-size: 10px; padding: 5px 10px; border-radius: 12px; white-space: nowrap; cursor: pointer;">Was ist SnapHome?</button>
+      <button class="snapy-quick" data-msg="Ist das CRM kostenlos?" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a5b2b0; font-size: 10px; padding: 5px 10px; border-radius: 12px; white-space: nowrap; cursor: pointer;">CRM Kosten?</button>
+    </div>
+
+    <!-- Eingabefeld -->
+    <form id="snapy-form" style="display: flex; padding: 10px; border-top: 1px solid rgba(255,255,255,0.1); background: #070a0b;">
+      <input type="text" id="snapy-input" placeholder="Schreibe eine Frage..." style="flex: 1; background: #151d1e; border: 1px solid rgba(255,255,255,0.15); color: #fff; padding: 8px 12px; border-radius: 8px; font-size: 12px; outline: none;" required>
+      <button type="submit" style="background: #00ff83; border: none; color: #052116; padding: 8px 14px; margin-left: 8px; border-radius: 8px; font-weight: 700; cursor: pointer;">➔</button>
+    </form>
+  </div>
+</div>
+
+<script>
+(function(){
+  var trigger = document.getElementById('snapy-trigger');
+  var box = document.getElementById('snapy-box');
+  var close = document.getElementById('snapy-close');
+  var form = document.getElementById('snapy-form');
+  var input = document.getElementById('snapy-input');
+  var messages = document.getElementById('snapy-messages');
+
+  trigger.addEventListener('click', function(){
+    box.style.display = (box.style.display === 'none' || !box.style.display) ? 'flex' : 'none';
+  });
+  close.addEventListener('click', function(){ box.style.display = 'none'; });
+
+  function addMsg(text, isUser) {
+    var msg = document.createElement('div');
+    msg.style.padding = '10px 14px';
+    msg.style.borderRadius = '10px';
+    msg.style.maxWidth = '85%';
+    msg.style.alignSelf = isUser ? 'flex-end' : 'flex-start';
+    if(isUser) {
+      msg.style.background = '#00ff83';
+      msg.style.color = '#052116';
+      msg.style.fontWeight = '600';
+    } else {
+      msg.style.background = 'rgba(0,255,131,0.08)';
+      msg.style.border = '1px solid rgba(0,255,131,0.2)';
+      msg.style.color = '#d5e3da';
+    }
+    msg.innerHTML = text;
+    messages.appendChild(msg);
+    messages.scrollTop = messages.scrollHeight;
+  }
+
+  function getAiReply(q) {
+    var query = q.toLowerCase();
+    if(query.includes('crm') || query.includes('kosten') || query.includes('preis')) {
+      return 'Das SnapHome CRM ist direkt im System integriert! Es gibt keine teuren Extra-Kosten für Drittanbieter-Tools.';
+    } else if(query.includes('launch') || query.includes('wann') || query.includes('start')) {
+      return 'Der geplante Launch ist am <strong>30. Oktober 2026</strong>. Du kannst dich unten direkt für den Vorab-Zugang eintragen!';
+    } else if(query.includes('staging') || query.includes('video') || query.includes('foto')) {
+      return 'SnapHome nutzt KI für Instant Virtual Staging und erzeugt aus deinen Objektfotos automatische Video-Exposés für Social Media & Portale!';
+    } else {
+      return 'SnapHome ist das erste hybride PropTech-Ökosystem mit integriertem CRM, KI-Wächter Snapy und Multi-Channel-Distribution. Trage dich unten im Formular ein!';
+    }
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var val = input.value.trim();
+    if(!val) return;
+    addMsg(val, true);
+    input.value = '';
+    setTimeout(function(){
+      addMsg(getAiReply(val), false);
+    }, 500);
+  });
+
+  document.querySelectorAll('.snapy-quick').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      var msg = this.getAttribute('data-msg');
+      addMsg(msg, true);
+      setTimeout(function(){
+        addMsg(getAiReply(msg), false);
+      }, 400);
+    });
+  });
+})();
+</script></body>
 </html>
