@@ -475,6 +475,7 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
   }
 });
 </script>
+
 <!-- SNAPY KI-CHATBOT WIDGET -->
 <div id="snapy-widget" style="position: fixed; bottom: 25px; right: 25px; z-index: 9999; font-family: Inter, sans-serif;">
   <!-- Floating Button -->
@@ -489,7 +490,7 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
     <div style="background: #151d1e; padding: 14px 18px; border-bottom: 1px solid rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: space-between;">
       <div style="display: flex; align-items: center; gap: 10px;">
         <span style="width: 10px; height: 10px; background: #00ff83; border-radius: 50%; display: inline-block; box-shadow: 0 0 8px #00ff83;"></span>
-        <strong style="color: #f3f5f2; font-size: 14px;">Snapy · KI-Wächter</strong>
+        <strong style="color: #f3f5f2; font-size: 14px;">Snapy · KI-Berater</strong>
       </div>
       <button id="snapy-close" style="background: none; border: none; color: #a5b2b0; font-size: 18px; cursor: pointer;">✕</button>
     </div>
@@ -497,14 +498,15 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
     <!-- Nachrichten-Verlauf -->
     <div id="snapy-messages" style="flex: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 12px; font-size: 12px; line-height: 1.5; color: #d5e3da;">
       <div style="background: rgba(0,255,131,0.08); border: 1px solid rgba(0,255,131,0.2); padding: 10px 14px; border-radius: 10px; align-self: flex-start; max-width: 85%;">
-        👋 Hi! Ich bin <strong>Snapy</strong>, dein KI-Wächter. Wie kann ich dir beim Immobilien CRM oder deiner Vermarktung helfen?
+        👋 Hi! Ich bin <strong>Snapy</strong>, dein persönlicher Berater für SnapHome. Wie kann ich dir beim Immobilien CRM, den Preisen oder der Vermarktung helfen?
       </div>
     </div>
 
     <!-- Schnell-Buttons -->
     <div style="padding: 8px 12px; background: #0c1112; border-top: 1px solid rgba(255,255,255,0.05); display: flex; gap: 6px; overflow-x: auto;">
-      <button class="snapy-quick" data-msg="Was ist SnapHome?" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a5b2b0; font-size: 10px; padding: 5px 10px; border-radius: 12px; white-space: nowrap; cursor: pointer;">Was ist SnapHome?</button>
-      <button class="snapy-quick" data-msg="Ist das CRM kostenlos?" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a5b2b0; font-size: 10px; padding: 5px 10px; border-radius: 12px; white-space: nowrap; cursor: pointer;">CRM Kosten?</button>
+      <button class="snapy-quick" data-msg="Was kostet das Gründerangebot?" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a5b2b0; font-size: 10px; padding: 5px 10px; border-radius: 12px; white-space: nowrap; cursor: pointer;">Gründerangebot?</button>
+      <button class="snapy-quick" data-msg="Was bietet das Makler CRM?" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a5b2b0; font-size: 10px; padding: 5px 10px; border-radius: 12px; white-space: nowrap; cursor: pointer;">Makler CRM?</button>
+      <button class="snapy-quick" data-msg="Hilfe für private Verkäufer?" style="background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); color: #a5b2b0; font-size: 10px; padding: 5px 10px; border-radius: 12px; white-space: nowrap; cursor: pointer;">Privatverkauf?</button>
     </div>
 
     <!-- Eingabefeld -->
@@ -551,15 +553,47 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
 
   function getAiReply(q) {
     var query = q.toLowerCase();
-    if(query.includes('crm') || query.includes('kosten') || query.includes('preis')) {
-      return 'Das SnapHome CRM ist direkt im System integriert! Es gibt keine teuren Extra-Kosten für Drittanbieter-Tools.';
-    } else if(query.includes('launch') || query.includes('wann') || query.includes('start')) {
-      return 'Der geplante Launch ist am <strong>30. Oktober 2026</strong>. Du kannst dich unten direkt für den Vorab-Zugang eintragen!';
-    } else if(query.includes('staging') || query.includes('video') || query.includes('foto')) {
-      return 'SnapHome nutzt KI für Instant Virtual Staging und erzeugt aus deinen Objektfotos automatische Video-Exposés für Social Media & Portale!';
-    } else {
-      return 'SnapHome ist das erste hybride PropTech-Ökosystem mit integriertem CRM, KI-Wächter Snapy und Multi-Channel-Distribution. Trage dich unten im Formular ein!';
+
+    // 1. Gründerangebot & Preise / Tarife
+    if (query.includes('gründer') || query.includes('12 monat') || query.includes('24 monat') || query.includes('36 monat') || query.includes('708') || query.includes('1416') || query.includes('2124')) {
+      return 'Unser <strong>Gründerangebot für Makler & Agenturen</strong> (bei Buchung bis 31.12.2026):<br>• <strong>59 € netto/Monat</strong> bei Vorauszahlung für die gewählte Laufzeit.<br>• 12 Monate: 708 € netto (+ MwSt.)<br>• 24 Monate: 1.416 € netto (+ MwSt.)<br>• 36 Monate: 2.124 € netto (+ MwSt.)<br><br>Die 59 € sind der rechnerische Monatspreis. Als Nächstes kannst du dir deinen Start-Platz im Formular sichern!';
     }
+    if (query.includes('preis') || query.includes('kosten') || query.includes('tarif') || query.includes('gebühr') || query.includes('angebot')) {
+      return 'Unsere Preisstruktur richtet sich nach deiner Zielgruppe:<br>• <strong>Privatkunden:</strong> Endpreise inklusive gesetzlicher MwSt.<br>• <strong>Makler & Agenturen:</strong> Gründerangebot ab rechnerisch 59 € netto/Monat (bei Vorauszahlung).<br><br>Sollen wir schauen, welches Paket für deine Zwecke passt?';
+    }
+
+    // 2. Makler & CRM & Webseiten
+    if (query.includes('crm') || query.includes('makler') || query.includes('agentur') || query.includes('pipeline') || query.includes('landingpage') || query.includes('webseite') || query.includes('kontakt')) {
+      return 'Das <strong>SnapHome CRM</strong> ist deine zentrale Arbeitsumgebung:<br>• Objekt- & Medienverwaltung, Kontakte & Anfragen.<br>• Suchprofile, Verkaufspipeline, Aufgaben, Termine & Kommunikation.<br>• Makler-Webseite & Objekt-Landingpages im eigenen Branding.<br><br>Du pflegst deine Immobilien zentral und steuerst Veröffentlichungen mit wenigen Klicks!';
+    }
+
+    // 3. Privatverkäufer / Vermietung
+    if (query.includes('privat') || query.includes('eigentümer') || query.includes('selbst verkaufen') || query.includes('vermieten')) {
+      return 'Für <strong>private Eigentümer</strong> macht SnapHome die Vermarktung kinderleicht:<br>• Du lieferst Objektdaten & Bilder.<br>• Snapy unterstützt dich bei Exposés, Texten & Visualisierungen.<br>• Du prüfst die Vorschau und gibst die Kanäle frei.<br><br>Möchtest du deine Immobilie verkaufen oder vermieten?';
+    }
+
+    // 4. Staging, Foto, Video, Fotografen & Rundgang
+    if (query.includes('staging') || query.includes('home staging') || query.includes('video') || query.includes('foto') || query.includes('rundgang') || query.includes('fotograf') || query.includes('exposé')) {
+      return 'Unsere Medien- & Staging-Leistungen:<br>• <strong>Virtuelles Home Staging:</strong> Fotorealistische digitale Möblierung (als Visualisierung gekennzeichnet).<br>• <strong>Foto-Video:</strong> Dynamisches Video aus vorhandenen Bildern für Reels & Portale.<br>• <strong>Fotografen:</strong> Buchung von regionalen Profis direkt übers Netzwerk.<br><br>Alle Vorschläge erfordern vor der Buchung deine ausdrückliche Freigabe!';
+    }
+
+    // 5. Portale, ImmoScout24 & Veröffentlichungsstatus
+    if (query.includes('immoscout') || query.includes('portal') || query.includes('kleinanzeigen') || query.includes('immowelt') || query.includes('übertragen') || query.includes('status') || query.includes('online')) {
+      return '<strong>Portalverteilung & Status:</strong><br>• SnapHome übernimmt die technische Übertragung an angebundene Portale.<br>• Für z. B. <em>ImmoScout24</em> verbindest du dein eigenes berechtigtes Konto (bestehende Portalverträge bleiben bestehen).<br>• <strong>Status:</strong> <em>Entwurf ➔ In Bearbeitung ➔ Übertragen ➔ Online</em>. Hinweis: "Übertragen" bedeutet noch nicht "Online"!';
+    }
+
+    // 6. Häufige Fragen (Muss ich alles selbst machen? Verkauft SnapHome meine Immobilie?)
+    if (query.includes('selbst machen') || query.includes('verkauft snaphome') || query.includes('garantie') || query.includes('erfolg')) {
+      return 'SnapHome unterstützt dich bei der Verwaltung und professionellen Vermarktung. Wir garantieren jedoch keine Verkäufe oder Reichweiten. Du behältst jederzeit die volle Kontrolle und Freigabe über alle Schritte!';
+    }
+
+    // 7. Datenschutz & Sicherheit
+    if (query.includes('datenschutz') || query.includes('sicherheit') || query.includes('passwort') || query.includes('daten') || query.includes('dsgvo')) {
+      return 'Deine Daten sind sicher! SnapHome verarbeitet Informationen streng nach EU-DSGVO. Im Chat frage ich dich niemals nach Passwörtern, API-Schlüsseln oder Bankdaten.';
+    }
+
+    // Fallback
+    return '👋 Hi! Ich bin <strong>Snapy</strong>, dein persönlicher Immobilien- und Marketingberater.<br><br>Ich helfe dir bei Fragen zum <strong>Immobilien CRM</strong>, dem <strong>Gründerangebot (59 €/Monat)</strong>, <strong>Virtual Staging</strong> oder der <strong>Portalverteilung</strong>. Was kann ich für dich tun?';
   }
 
   form.addEventListener('submit', function(e){
@@ -583,5 +617,6 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
     });
   });
 })();
-</script></body>
+</script>
+</body>
 </html>
