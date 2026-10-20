@@ -8,6 +8,23 @@
 <link rel="canonical" href="https://www.snaphome-start.com/">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 
+<!-- Google Tag (gtag.js) & Consent Mode v2 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-4RE8E8H0FQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+
+  // DSGVO-Standard: Vor Zustimmung des Nutzers alles blockieren
+  gtag('consent', 'default', {
+    'ad_storage': 'denied',
+    'analytics_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied'
+  });
+
+  gtag('js', new Date());
+  gtag('config', 'G-4RE8E8H0FQ');
+</script>
 
 <!-- Open Graph / WhatsApp / LinkedIn / Facebook -->
 <meta property="og:type" content="website">
@@ -253,7 +270,7 @@
             <div>
               <svg class="icon" aria-hidden="true"><use href="#portals"/></svg>
               <h3>Ein Klick, alle Portale</h3>
-              <p>Automatische Ausspielung und Synchronisation auf reichweitenstarken Plattformen wie Kleinanzeigen, Immowelt und Immonet.</p>
+              <p>Automatische Ausspielung auf Plattformen wie Kleinanzeigen, Immowelt, Immonet und weiteren. Für private Verkäufer ohne eigenen Portal-Account und ohne Zusatzkosten! Laufend kommen weitere globale Partnerschaften und Länder hinzu.</p>
             </div>
             <div>
               <h3>Das Experten-Netzwerk</h3>
@@ -479,6 +496,55 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
 });
 </script>
 
+<!-- COOKIE CONSENT BANNER (DSGVO) -->
+<div id="cookie-banner" style="display: none; position: fixed; bottom: 20px; left: 20px; right: 20px; max-width: 480px; background: #101617; border: 1px solid rgba(0, 255, 131, 0.3); border-radius: 14px; padding: 18px 22px; z-index: 10000; box-shadow: 0 10px 30px rgba(0,0,0,0.8); font-family: Inter, sans-serif;">
+  <p style="margin: 0 0 12px; font-size: 12px; color: #d5e3da; line-height: 1.6;">
+    Wir nutzen Cookies & Google Analytics, um die Nutzung unserer Plattform zu analysieren und zu verbessern. Erfahre mehr in unserer <a href="#datenschutz" style="color: var(--green); text-decoration: underline;">Datenschutzerklärung</a>.
+  </p>
+  <div style="display: flex; gap: 10px; justify-content: flex-end;">
+    <button id="cookie-deny" style="background: transparent; border: 1px solid var(--line); color: var(--muted); padding: 8px 14px; border-radius: 6px; font-size: 11px; cursor: pointer;">Nur essenzielle</button>
+    <button id="cookie-accept" style="background: var(--green); border: none; color: #052116; font-weight: 700; padding: 8px 16px; border-radius: 6px; font-size: 11px; cursor: pointer;">Alle akzeptieren</button>
+  </div>
+</div>
+
+<script>
+(function() {
+  var banner = document.getElementById('cookie-banner');
+  var acceptBtn = document.getElementById('cookie-accept');
+  var denyBtn = document.getElementById('cookie-deny');
+  var consent = localStorage.getItem('snaphome_cookie_consent');
+
+  if (!consent) {
+    banner.style.display = 'block';
+  } else if (consent === 'granted') {
+    updateConsent('granted');
+  }
+
+  function updateConsent(status) {
+    if (typeof gtag === 'function') {
+      gtag('consent', 'update', {
+        'analytics_storage': status,
+        'ad_storage': status,
+        'ad_user_data': status,
+        'ad_personalization': status
+      });
+    }
+  }
+
+  acceptBtn.addEventListener('click', function() {
+    localStorage.setItem('snaphome_cookie_consent', 'granted');
+    updateConsent('granted');
+    banner.style.display = 'none';
+  });
+
+  denyBtn.addEventListener('click', function() {
+    localStorage.setItem('snaphome_cookie_consent', 'denied');
+    updateConsent('denied');
+    banner.style.display = 'none';
+  });
+})();
+</script>
+
 <!-- SNAPY KI-CHATBOT WIDGET -->
 <div id="snapy-widget" style="position: fixed; bottom: 25px; right: 25px; z-index: 9999; font-family: Inter, sans-serif;">
   <!-- Floating Button -->
@@ -562,9 +628,9 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
       return '<strong>SnapHome VIP & Google Ads:</strong><br>• <strong>Zusätzliche Begleitung:</strong> Optimierung von Präsentation, Exposé, Landingpage und Werbekampagnen.<br>• <strong>Strikte Kostentrennung:</strong> Wir unterscheiden klar zwischen 1. SnapHome-Paketpreis, 2. Einrichtung & Betreuung und 3. deinem separaten Google-Werbebudget.<br>• <strong>Transparenz:</strong> Keine erfundenen Erfolgs- oder Sales-Garantien. Alle Anzeigentexte, Freigaben und Budgets steuerst du selbst.';
     }
 
-    // 2. Portale & Verteilung (Privat- & Maklerkunden)
-    if (query.includes('portal') || query.includes('wo erscheint') || query.includes('welche portale') || query.includes('immoscout') || query.includes('kleinanzeigen') || query.includes('immowelt') || query.includes('ausspielung')) {
-      return '<strong>Gängige Portalanschlüsse:</strong><br>Unterstützte Kanäle umfassen u. a. <em>Kleinanzeigen, ImmoScout24, Immowelt, immobilien.de, Clever-Immobilien, Immo4trans, ImmoKV, immoNissimo, Immobilienanzeigen24</em> und <em>Immozentral</em>.<br><br><em>Wichtig:</em> Welche Kanäle nutzbar sind, hängt vom Tarif, den technischen Schnittstellen und deinen eigenen Portalverträgen ab. Eine Anbindung beinhaltet keine pauschale Übernahme fremder Portal-Inseratsgebühren.';
+    // 2. Portale & Verteilung (Privat- & Maklerkunden, Partnerschaften & Länder)
+    if (query.includes('portal') || query.includes('wo erscheint') || query.includes('welche portale') || query.includes('immoscout') || query.includes('kleinanzeigen') || query.includes('immowelt') || query.includes('ausspielung') || query.includes('länder') || query.includes('partner')) {
+      return '<strong>Portalanschlüsse & Internationale Ausspielung:</strong><br>• <strong>Für private Eigentümer:</strong> Inserate werden <u>ohne eigenen Portal-Account</u> und <u>ohne zusätzliche Kosten</u> auf verschiedenen Portalen veröffentlicht.<br>• <strong>Unterstützte Kanäle:</strong> Kleinanzeigen, ImmoScout24, Immowelt, immobilien.de, Clever-Immobilien, Immo4trans, ImmoKV, immoNissimo, Immobilienanzeigen24, Immozentral u. v. m.<br>• <strong>Wachstum:</strong> Laufend kommen weitere globale Partnerschaften und neue Länder hinzu!<br>• <strong>Für Makler:</strong> Technische Übertragung via OpenImmo/Schnittstelle oder über deine eigenen Portalverträge.';
     }
 
     // 3. Makler CRM (Pipeline, Kontakte, Team, Auswertungen)
@@ -577,12 +643,12 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
       return '<strong>Gründerangebot für Makler & Agenturen</strong> (bis 31.12.2026):<br>• <strong>59 € netto/Monat</strong> bei Laufzeit-Vorauszahlung.<br>• 12 Monate: 708 € netto (+ MwSt.)<br>• 24 Monate: 1.416 € netto (+ MwSt.)<br>• 36 Monate: 2.124 € netto (+ MwSt.)<br><br>Rechnerischer Monatspreis bei Vorauszahlung. Zusatzkosten für Werbebudgets oder externe Shootings werden separat ausgewiesen.';
     }
     if (query.includes('preis') || query.includes('kosten') || query.includes('tarif') || query.includes('gebühr') || query.includes('angebot')) {
-      return '<strong>Preise & Abrechnung:</strong><br>• <strong>Privatkunden:</strong> Endpreise inkl. MwSt.<br>• <strong>Gewerbliche Kunden / Makler:</strong> Nettopreise zzgl. MwSt.<br>Vor jeder Buchung erhältst du eine Aufschlüsselung über Paketpreis, Betreuung und eventuelle Drittkosten.';
+      return '<strong>Preise & Abrechnung:</strong><br>• <strong>Privatkunden:</strong> Endpreise inkl. MwSt. (Ausspielung auf Portalen ohne Zusatzkosten).<br>• <strong>Gewerbliche Kunden / Makler:</strong> Nettopreise zzgl. MwSt.<br>Vor jeder Buchung erhältst du eine Aufschlüsselung über Paketpreis, Betreuung und eventuelle Drittkosten.';
     }
 
     // 5. Private Eigentümer
     if (query.includes('privat') || query.includes('eigentümer') || query.includes('selbst verkaufen') || query.includes('vermieten')) {
-      return '<strong>Für private Eigentümer:</strong><br>SnapHome hilft dir, deine Immobilie wie ein Profi zu präsentieren. Du lieferst Objektdaten & Fotos – Snapy unterstützt bei Texten, Exposé-Formaten & Staging-Visualisierungen. Veröffentlicht wird nur auf den von dir freigegebenen Kanälen.';
+      return '<strong>Für private Eigentümer:</strong><br>SnapHome hilft dir, deine Immobilie wie ein Profi zu präsentieren. Deine Inserate werden <strong>ohne eigenen Portal-Account</strong> und <strong>ohne Zusatzkosten</strong> auf mehreren Portalen veröffentlicht. Snapy unterstützt dich bei Texten, Exposés & Staging-Visualisierungen!';
     }
 
     // 6. Staging, Foto, Video, Fotografen & Rundgang
@@ -596,7 +662,7 @@ document.getElementById('prototype-form').addEventListener('submit',async functi
     }
 
     // Fallback
-    return '👋 Ich bin <strong>Snapy</strong>, dein persönlicher Berater.<br><br>Ich helfe dir zu <strong>CRM-Modulen</strong>, <strong>VIP & Google Ads</strong>, unterstützten <strong>Portalverbindungen</strong> sowie unserem <strong>Gründerangebot (59 €/Monat)</strong> weiter. Welches Thema möchtest du besprechen?';
+    return '👋 Ich bin <strong>Snapy</strong>, dein persönlicher Berater.<br><br>Ich helfe dir zu <strong>CRM-Modulen</strong>, <strong>VIP & Google Ads</strong>, <strong>Portalverbindungen (kostenlos für Privatkunden)</strong> sowie unserem <strong>Gründerangebot (59 €/Monat)</strong> weiter. Welches Thema möchtest du besprechen?';
   }
 
   form.addEventListener('submit', function(e){
